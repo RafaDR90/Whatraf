@@ -18,8 +18,13 @@ export default function App() {
   }
 
   function insertaImagen() {
+    if (nombre.trim() == ''){
+      alert('Por favor, ingresa un nombre válido.');
+      return;
+    }
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
+    let nombreArchivo = file.name;
     const formData = new FormData();
     formData.append('sampleFile', file);
     fetch(endpoint, {
@@ -27,13 +32,16 @@ export default function App() {
       body: formData
     })
     .then(data => {
-      console.log(data);
       alert('File uploaded successfully!');
     })
     .catch(error => {
       console.error(error);
       alert('Error uploading file');
-    });
+    })
+    .finally(()=>{
+      socket.emit('newNameAndPic', {nombre: nombre, foto: nombreArchivo});
+      navigate('/chat');
+    })
   }
 
   useEffect(() => {
@@ -58,8 +66,8 @@ export default function App() {
     socket.on('connection', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
-    socket.on('usuariosConectados', (usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
+    socket.on('usuariosConectados', (cantidad) => {
+      console.log('Usuarios conectados:', cantidad);
     });
 
     return () => {

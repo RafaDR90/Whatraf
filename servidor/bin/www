@@ -7,6 +7,16 @@ const { Server } = require('socket.io');
 var app = require('../app');
 var debug = require('debug')('whatraf:server');
 var http = require('http');
+const { count } = require('console');
+
+//Para las imagenes
+const express = require('express');
+const expressApp = express();
+const path = require('path');
+
+
+expressApp.use(express.static(path.join(__dirname, 'public')));
+expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos')));
 
 /**
  * Get port from environment and store in Express.
@@ -28,17 +38,38 @@ const io = new Server({
 });
 
 io.listen(4000);
-
-let usuariosConectados = 0;
+var usuarios= [];
 io.on('connection', (socket) => {
-  io.emit('connection');
-  usuariosConectados++;
-  io.emit('usuariosConectados', usuariosConectados);
   console.log('usuario conectado');
+
+  //recogo el socket.emit de newNameAndPic
+  socket.on('newNameAndPic', (data) => {
+    //meto en usuarios el nombre, la foto y el socket
+    usuarios.push({nombre: data.nombre, foto: data.foto, socketId: socket.id});
+    io.emit('usuariosConectados', usuarios);
+    console.log(usuarios.length);
+  });
+
+  socket.on('mensajeTo', (data) => {
+    console.log('mensaje enviado');
+    console.log(data);
+    socket.to(data.id).emit('mensaje', data.mensaje);
+    usuarios.forEach(usuario => {
+      if(usuario.socketId === data.id){
+        //añado a ese usuario el mensaje junto con el nombre del emisor
+        usuario.mensajes.push({mensaje: data.mensaje, emisor: socket.nombre});
+      }
+    });
+  });
+
+
   socket.on('disconnect', () => {
-    usuariosConectados--;
-    io.emit('usuariosConectados', usuariosConectados);
+    //elimino el usuario del array
+    console.log('ESTO NO DEVERIA DE PASAR')
+    usuarios = usuarios.filter(usuario => usuario.socketId !== socket.id);
+    io.emit('usuariosConectados', usuarios);
     console.log('usuario desconectado');
+    
   });
 });
 

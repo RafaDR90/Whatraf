@@ -1,0 +1,47 @@
+.contenedor{
+    display: flex;
+}
+.listaUsuarios {
+    background-color: #ccc;
+    width: 20vw; /* Ancho del div listaUsuarios */
+    height: 100vh;
+    float: left; /* Coloca el div a la izquierda */
+    padding: 20px; /* Espaciado interior */
+  }
+  
+  .listaUsuarios h3 {
+    margin-bottom: 10px; /* Margen inferior para el encabezado */
+  }
+  
+  .listaUsuarios ul {
+    list-style-type: none; /* Elimina los estilos de lista predeterminados */
+    padding: 0;
+  }
+  
+  .listaUsuarios li {
+    background-color: white;
+    cursor: pointer;
+    display: flex; /* Utiliza flexbox para alinear elementos horizontalmente */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 15px; /* Margen inferior entre elementos */
+  }
+  .listaUsuarios li:hover {
+    background-color: #e4e4e4; /* Cambia el color de fondo al pasar el ratón por encima */
+    border: solid 1px #ccc; /* Añade un borde al pasar el ratón por encima */
+  }
+  .listaUsuarios li:active {
+    background-color: #d4d4d4; /* Cambia el color de fondo al hacer clic */
+  }
+  
+  .listaUsuarios img {
+    width: 40px; /* Tamaño de la imagen */
+    height: 40px;
+    border-radius: 50%; /* Hace la imagen circular */
+    margin-right: 10px;
+    margin-left: 10px; /* Margen a la derecha de la imagen */
+  }
+  
+  .chat {
+    /* Estilos para el componente de chat (aún por definir) */
+  }
+  
