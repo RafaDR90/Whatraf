@@ -31,23 +31,37 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-const io = new Server({
+const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173"
   }
 });
 
+
+
 io.listen(4000);
 var usuarios= [];
-io.on('connection', (socket) => {
-  console.log('usuario conectado');
+var rooms = []
 
-  //recogo el socket.emit de newNameAndPic
+const enviarUsuariosConectados = () => {
+  io.emit('usuariosConectados', usuarios);
+};
+
+const intervaloUsuariosConectados = setInterval(enviarUsuariosConectados, 3000);
+
+
+io.on('connection', (socket) => {
+
   socket.on('newNameAndPic', (data) => {
     //meto en usuarios el nombre, la foto y el socket
     usuarios.push({nombre: data.nombre, foto: data.foto, socketId: socket.id});
     io.emit('usuariosConectados', usuarios);
+    socket.broadcast.emit('usuarioConectado', data.nombre);
     console.log(usuarios.length);
+  });
+
+  socket.on('escribiendo', (data) => {
+    socket.to(data.receptor).emit('meEscriben', data.emisor);
   });
 
   socket.on('mensajeTo', (data) => {
@@ -56,10 +70,20 @@ io.on('connection', (socket) => {
     socket.to(data.id).emit('mensaje', {mensaje: data.mensaje, emisor: data.emisor, receptor: data.id});
   });
 
+  socket.on('creaSala', (nombreSala) => {
+    socket.join(nombreSala);
+    rooms.push(io.sockets.adapter.rooms);
+    io.emit('rooms', rooms);
+    console.log(rooms);
+  });
+
 
   socket.on('disconnect', () => {
-    //elimino el usuario del array
-    console.log('ESTO NO DEVERIA DE PASAR')
+    const usuarioEncontrado = usuarios.find(usuario => usuario.socketId === socket.id);
+    if (usuarioEncontrado) {
+      nombreUsuario = usuarioEncontrado.nombre;
+      socket.broadcast.emit('usuarioDesconectado', nombreUsuario);
+    }
     usuarios = usuarios.filter(usuario => usuario.socketId !== socket.id);
     io.emit('usuariosConectados', usuarios);
     console.log('usuario desconectado');

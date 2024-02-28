@@ -8,14 +8,6 @@ export default function App() {
   const fileInput = document.getElementById('fileInput');
   const endpoint = 'http://localhost:3000/upload';
 
-  function asignaNombre() {
-    if (nombre.trim() !== '') {
-      socket.nombre = nombre;
-      navigate('/chat');
-    } else {
-      console.log('Por favor, ingresa un nombre válido.');
-    }
-  }
 
   function insertaImagen() {
     if (nombre.trim() == ''){
@@ -81,8 +73,8 @@ export default function App() {
   return (
     <div className="App">
       <h2>Bienvenido, escribe tu nombre para continuar:</h2>
+      <label>Nombre: </label>
       <input type='text' value={nombre} onChange={(e) => setNombre(e.target.value)} />
-      <button onClick={asignaNombre}>Enviar</button>
       <form>
       <input type="file" id="fileInput" name="fileInput"></input>
       <button type="button" onClick={insertaImagen} id="uploadButton">Upload</button>
