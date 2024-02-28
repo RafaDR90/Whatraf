@@ -22,7 +22,7 @@ expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos'))
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3000'); //RENDER_EXTERNAL_URL
 app.set('port', port);
 
 /**
@@ -53,13 +53,7 @@ io.on('connection', (socket) => {
   socket.on('mensajeTo', (data) => {
     console.log('mensaje enviado');
     console.log(data);
-    socket.to(data.id).emit('mensaje', data.mensaje);
-    usuarios.forEach(usuario => {
-      if(usuario.socketId === data.id){
-        //añado a ese usuario el mensaje junto con el nombre del emisor
-        usuario.mensajes.push({mensaje: data.mensaje, emisor: socket.nombre});
-      }
-    });
+    socket.to(data.id).emit('mensaje', {mensaje: data.mensaje, emisor: data.emisor, receptor: data.id});
   });
 
 

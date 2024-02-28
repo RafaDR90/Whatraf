@@ -4,6 +4,7 @@ import './chat.css';
 
 
 
+
 export default function chat() {
 
     const [usuarios, setUsuarios] = useState([]);
@@ -22,7 +23,11 @@ export default function chat() {
 
     function enviarMensaje(id) {
         return () => {
-            socket.emit('mensajeTo', { mensaje, id });
+            console.log('enviando mensaje');
+            console.log(mensaje)
+            console.log(id);
+            socket.emit('mensajeTo', { mensaje: mensaje, id: id, emisor: socket.id});
+            setMensajes([...mensajes, {mensaje, emisor: socket.id, receptor: id}]);
             setMensaje('');
         };
     }
@@ -34,7 +39,7 @@ export default function chat() {
         });
 
         socket.on('mensaje', mensaje => {
-            
+            setMensajes([...mensajes, mensaje]);
         });
         
         return () => {
@@ -47,22 +52,27 @@ export default function chat() {
             <div className='listaUsuarios'>
                 <h3>Usuarios conectados:</h3>
                 <ul>
-                    {usuarios.map(usuario => (
+                    {usuarios.filter(usuario => usuario.socketId !== socket.id).map((usuario, index) => (
                         <li onClick={generaChat(usuario)} key={usuario.socketId}>
                             <img src={`http://localhost:3000/fotos/${usuario.foto}`} alt="foto de perfil" />
                             <p>{usuario.nombre}</p>
                         </li>
                     ))}
+                    
                 </ul>
             </div>
             <div className='chat'>
                 {chat ? (
                     <div>
                         <h3>Chat con {chat.nombre}</h3>
-                        <div className='mensajes'></div>
+                        <div className='mensajes'>
+                            {mensajes.filter(mensaje => (mensaje.emisor === chat.socketId && mensaje.receptor === socket.id) || (mensaje.emisor === socket.id && mensaje.receptor === chat.socketId)).map((mensaje, index) => (
+                                <p key={index}>{mensaje.mensaje}</p>
+                            ))}
+                        </div>
                         <div className='inputs'>
                             <input type='text' value={mensaje} onChange={e => setMensaje(e.target.value)} />
-                            <button onClick={enviarMensaje(usuario.id)}>Enviar</button>
+                            <button onClick={enviarMensaje(chat.socketId)}>Enviar</button>
                         </div>
                     </div>
                 ) : (
