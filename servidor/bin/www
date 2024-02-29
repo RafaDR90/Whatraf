@@ -13,7 +13,7 @@ const { count } = require('console');
 const express = require('express');
 const expressApp = express();
 const path = require('path');
-
+const cors = require('cors'); // Importar el middleware cors
 
 /*expressApp.use(express.static(path.join(__dirname, 'public')));
 expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos')));
@@ -21,6 +21,8 @@ expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos'))
 expressApp.use(express.static(path.join(__dirname, 'public')));
 expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos')));
 
+// Agregar middleware cors
+expressApp.use(cors());
 
 /**
  * Get port from environment and store in Express.
