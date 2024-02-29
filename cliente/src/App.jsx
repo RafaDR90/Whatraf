@@ -6,7 +6,7 @@ export default function App() {
   const [nombre, setNombre] = useState('');
   const navigate = useNavigate();
   const fileInput = document.getElementById('fileInput');
-  const endpoint = 'http://localhost:3000/upload';
+  const endpoint = 'https://whatraf.onrender.com/upload';
 
 
   function insertaImagen() {
