@@ -15,6 +15,12 @@ export default function App() {
       return;
     }
     const fileInput = document.getElementById('fileInput');
+
+    if (!fileInput.files[0]) {
+      alert('Por favor, selecciona un archivo antes de continuar.');
+      return;
+    }
+
     const file = fileInput.files[0];
     let nombreArchivo = file.name;
     const formData = new FormData();
