@@ -52,6 +52,11 @@ const intervaloUsuariosConectados = setInterval(enviarUsuariosConectados, 3000);
 
 io.on('connection', (socket) => {
 
+
+  socket.on('error', (error) => {
+    console.error('Error en el socket:', error);
+  });
+
   socket.on('newNameAndPic', (data) => {
     //meto en usuarios el nombre, la foto y el socket
     usuarios.push({nombre: data.nombre, foto: data.foto, socketId: socket.id});
@@ -61,12 +66,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('escribiendo', (data) => {
-    socket.to(data.receptor).emit('meEscriben', data.emisor);
+    socket.to(data.receptorcliente/dist/vite.svg cliente/dist/index.html cliente/dist/assets).emit('meEscriben', data.emisor);
   });
 
   socket.on('mensajeTo', (data) => {
-    console.log('mensaje enviado');
-    console.log(data);
     socket.to(data.id).emit('mensaje', {mensaje: data.mensaje, emisor: data.emisor, receptor: data.id});
   });
 
@@ -75,6 +78,11 @@ io.on('connection', (socket) => {
     rooms.push(io.sockets.adapter.rooms);
     io.emit('rooms', rooms);
     console.log(rooms);
+  });
+
+  socket.on('mensajeGloval', (data) => {
+    console.log('mensaje global');
+    io.emit('getMensajeGlobal', {mensaje: data.mensaje, emisor: data.emisor});
   });
 
 

@@ -21,6 +21,7 @@ export default function chat() {
     const [creandoSala, setCreandoSala] = useState(false);
     const [nombreSala, setNombreSala] = useState('');
     const [salas, setSalas] = useState([]);
+    const [mensajesGlobales, setMensajesGlobales] = useState([]);
     let timeOutUsuarioConectado;
     let timeOutMeEscriben;
     let timeOutUsuarioDesconectado;
@@ -51,12 +52,27 @@ export default function chat() {
         socket.emit('creaSala', nombreSala);
     }
 
+    function enviarAll() {
+        socket.emit('mensajeGloval', {mensaje: mensaje, emisor: socket.id, receptor: 'all'});
+        setMensaje('');
+    }
     
     useEffect(() => {
         socket.on('usuariosConectados', usuarios => {
             setUsuarios(usuarios);
         });
 
+        socket.on('getMensajeGlobal', msg => {
+            console.log('mensaje globalcas');
+            //busco el nombre del emisor
+            console.log(usuarios);
+            if(usuarios.length > 0){
+                var nombreEmisor = usuarios.find(usuario => usuario.socketId === msg.emisor).nombre;
+                console.log(nombreEmisor);
+
+            }
+            setMensajesGlobales(prevMensajesGlobales => [...prevMensajesGlobales, {mensaje: msg.mensaje, emisor: msg.emisor}]);
+        });
         
 
         socket.on('rooms', rooms => {
@@ -108,11 +124,13 @@ export default function chat() {
             clearTimeout(timeOutMeEscriben);
             clearTimeout(timeOutUsuarioDesconectado);
             socket.off('rooms');
+            socket.off('getMensajeGlobal');
+            socket.off('usuarioDesconectado'); //si da problemas la borro
         };
     }, []);
 
     useEffect(() => {
-        console.log(salas)
+        
     }, [salas]);
 
     return (
@@ -121,6 +139,8 @@ export default function chat() {
                 <button onClick={() => setCreandoSala(true)}>Crear sala</button>
                 <h3>Usuarios conectados:</h3>
                 <ul>
+                <li onClick={() => setChat(null)}>Chat general</li>
+
                     {usuarios.filter(usuario => usuario.socketId !== socket.id).map((usuario, index) => (
                         <li onClick={generaChat(usuario)} key={usuario.socketId}>
                             <img src={`http://localhost:3000/fotos/${usuario.foto}`} alt="foto de perfil" />
@@ -145,7 +165,8 @@ export default function chat() {
                             {mensajes.filter(mensaje => (mensaje.emisor === chat.socketId && mensaje.receptor === socket.id) || (mensaje.emisor === socket.id && mensaje.receptor === chat.socketId)).map((mensaje, index) => (
                                 //si el mensaje es del usuario que esta chateando, se pone a la derecha y si no, a la izquierda
                                 <div key={index} className={mensaje.emisor === socket.id ? 'mensaje derecha' : 'mensaje izquierda'}>
-                                    <p key={index}>{mensaje.mensaje}</p>
+                                    <p>{mensaje.mensaje}</p>
+                                    
                                 </div>
                             ))}
                         </div>
@@ -167,7 +188,35 @@ export default function chat() {
                     <div>
                     {usuarioConectado ? <h5>{usuarioConectado}</h5> : <h5>{usuarioDesconectado}</h5>}
                         
-                        <h3>Selecciona un usuario para chatear</h3>
+                        <h3>Chat general</h3>
+                        <div className='mensajes'>
+                        {mensajesGlobales.map((mensaje, index) => {
+                            const emisor = usuarios.find(usuario => usuario.socketId === mensaje.emisor);
+                            const nombreEmisor = emisor ? emisor.nombre : "Desconocido"; 
+                            return (
+                                <div key={index} className={mensaje.emisor === socket.id ? 'mensaje derecha' : 'mensaje izquierda'}>
+                                {mensaje.emisor !== socket.id && 
+                                    <p style={{ fontWeight: 'bold', backgroundColor: 'white', borderRadius: '10px', paddingRight: '5px', paddingLeft:'5px' }}>
+                                        {nombreEmisor}
+                                    </p>
+                                }
+                                    <p>{mensaje.mensaje}</p>
+                                </div>
+                            );
+                        })}
+                        </div>
+                        <div className='inputs'>
+                            <input type='text' value={mensaje} onChange={e =>{ 
+                                setMensaje(e.target.value); 
+                                }}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        enviarAll();
+                                    }
+                                }}  
+                            />
+                            <button onClick={enviarAll}>Enviar</button>
+                        </div>
                     </div>
                     
                 )}

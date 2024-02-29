@@ -59,7 +59,6 @@ export default function App() {
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
     socket.on('usuariosConectados', (cantidad) => {
-      console.log('Usuarios conectados:', cantidad);
     });
 
     return () => {
