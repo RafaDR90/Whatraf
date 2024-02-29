@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from './socket';
 import { useNavigate } from 'react-router-dom';
+import './App.css';
 
 export default function App() {
   const [nombre, setNombre] = useState('');

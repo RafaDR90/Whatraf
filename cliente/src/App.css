@@ -8,8 +8,54 @@
   align-items: center;
   justify-content: center;
 }
+/* app.css */
 
+/* Estilos para el contenedor principal */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Centra el contenido verticalmente */
+}
 
+/* Estilos para el título */
+h2 {
+  margin-bottom: 20px; /* Espacio inferior */
+}
+
+/* Estilos para el formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilos para el campo de entrada de texto */
+input[type='text'] {
+  width: 300px; /* Ancho del campo de entrada */
+  margin-bottom: 10px; /* Espacio inferior */
+  padding: 10px; /* Espaciado interior */
+  border-radius: 5px; /* Bordes redondeados */
+  border: 1px solid #ccc; /* Borde */
+}
+
+/* Estilos para el botón */
+button {
+  margin-top: 10px;
+  background-color: #ffffff !important; /* Color de fondo */
+  color: #000000; /* Color del texto */
+  border: black 3px solid !important; /* Borde */
+  border: none; /* Borde */
+  padding: 10px 20px; /* Espaciado interior */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cursor al pasar el ratón */
+}
+
+button:hover {
+  background-color: #07352f !important; /* Cambia el color de fondo al pasar el ratón por encima */
+  color: white;
+}
 
 .logo {
   height: 6em;

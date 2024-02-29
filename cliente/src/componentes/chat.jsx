@@ -38,6 +38,7 @@ export default function chat() {
 
     function enviarMensaje(id) {
         return () => {
+            if(mensaje.trim() === '') return;
             socket.emit('mensajeTo', { mensaje: mensaje, id: id, emisor: socket.id});
             setMensajes([...mensajes, {mensaje: mensaje, emisor: socket.id, receptor: id}]);
             setMensaje('');
@@ -53,6 +54,7 @@ export default function chat() {
     }
 
     function enviarAll() {
+        if(mensaje.trim() === '') return;
         socket.emit('mensajeGloval', {mensaje: mensaje, emisor: socket.id, receptor: 'all'});
         setMensaje('');
     }
