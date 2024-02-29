@@ -37,7 +37,7 @@ var server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://whatraf.onrender.com/"
+    origin: "https://whatraf.onrender.com"
   }
 });
 
