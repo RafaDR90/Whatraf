@@ -143,7 +143,7 @@ export default function chat() {
 
                     {usuarios.filter(usuario => usuario.socketId !== socket.id).map((usuario, index) => (
                         <li onClick={generaChat(usuario)} key={usuario.socketId}>
-                            <img src={`http://localhost:3000/fotos/${usuario.foto}`} alt="foto de perfil" />
+                            <img src={`./fotos/${usuario.foto}`} alt="foto de perfil" />
                             <p>{usuario.nombre}</p>
                             {escribiendo.includes(usuario.socketId) ? <p className='verdePequeno'>Escribiendo...</p> : <p></p>}
                         </li>
