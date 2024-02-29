@@ -15,8 +15,12 @@ const expressApp = express();
 const path = require('path');
 
 
+/*expressApp.use(express.static(path.join(__dirname, 'public')));
+expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos')));
+*/
 expressApp.use(express.static(path.join(__dirname, 'public')));
 expressApp.use('/fotos', express.static(path.join(__dirname, 'public', 'fotos')));
+
 
 /**
  * Get port from environment and store in Express.
@@ -33,7 +37,7 @@ var server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173"
+    origin: "https://whatraf.onrender.com/"
   }
 });
 
@@ -66,7 +70,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('escribiendo', (data) => {
-    socket.to(data.receptorcliente/dist/vite.svg cliente/dist/index.html cliente/dist/assets).emit('meEscriben', data.emisor);
+    socket.to(data.receptor).emit('meEscriben', data.emisor);
   });
 
   socket.on('mensajeTo', (data) => {
