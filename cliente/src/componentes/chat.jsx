@@ -181,7 +181,7 @@ export default function chat() {
                                     }
                                 }}  
                             />
-                            <button onClick={enviarMensaje()}>Enviar</button> 
+                            <button onClick={enviarMensaje(chat.socketId)}>Enviar</button> 
                         </div>
                     </div>
                 ) : (
