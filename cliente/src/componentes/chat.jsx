@@ -78,6 +78,7 @@ export default function chat() {
         
 
         socket.on('rooms', rooms => {
+            nombreSalas = Object.keys(rooms);
             setSalas(rooms);
         });
 
