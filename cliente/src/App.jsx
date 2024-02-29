@@ -82,6 +82,7 @@ export default function App() {
       <label>Nombre: </label>
       <input type='text' value={nombre} onChange={(e) => setNombre(e.target.value)} />
       <form>
+      <h3>Selecciona una foto de perfil:</h3>
       <input type="file" id="fileInput" name="fileInput"></input>
       <button type="button" onClick={insertaImagen} id="uploadButton">Upload</button>
       </form>

@@ -79,7 +79,7 @@ export default function chat() {
 
         socket.on('rooms', rooms => {
             console.log(rooms);
-            nombreSalas = Object.keys(rooms);
+            let nombreSalas = Object.keys(rooms);
             setSalas(rooms);
         });
 
