@@ -20,19 +20,19 @@
 }
 
 /* Estilos para el título */
-h2 {
+.App h2 {
   margin-bottom: 20px; /* Espacio inferior */
 }
 
 /* Estilos para el formulario */
-form {
+.App form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 /* Estilos para el campo de entrada de texto */
-input[type='text'] {
+.App input[type='text'] {
   width: 300px; /* Ancho del campo de entrada */
   margin-bottom: 10px; /* Espacio inferior */
   padding: 10px; /* Espaciado interior */
@@ -41,7 +41,7 @@ input[type='text'] {
 }
 
 /* Estilos para el botón */
-button {
+.App button {
   margin-top: 10px;
   background-color: #ffffff !important; /* Color de fondo */
   color: #000000; /* Color del texto */
@@ -52,7 +52,7 @@ button {
   cursor: pointer; /* Cursor al pasar el ratón */
 }
 
-button:hover {
+.App button:hover {
   background-color: #07352f !important; /* Cambia el color de fondo al pasar el ratón por encima */
   color: white;
 }
